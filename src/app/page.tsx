@@ -1,7 +1,16 @@
 import { getProducts } from "@/lib/fourthwall";
 import Link from "next/link";
 import Image from "next/image";
-import CountdownTimer from "@/components/CountdownTimer";
+import dynamic from "next/dynamic";
+
+// Dynamically import the CountdownTimer so Vercel skips it during the build.
+// Added a dark-mode pulsing skeleton to maintain the high-end "Vault" aesthetic while it loads.
+const CountdownTimer = dynamic(() => import("@/components/CountdownTimer"), {
+  ssr: false,
+  loading: () => (
+    <div className="mt-12 h-[80px] w-[300px] bg-white/5 animate-pulse rounded-sm"></div>
+  )
+});
 
 export default async function Home() {
   const products = await getProducts();
